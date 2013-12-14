@@ -7,6 +7,7 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.unisul.tcc.builders.CriadorDeTransferencia;
 import com.unisul.tcc.exceptions.DataInvalidaException;
 import com.unisul.tcc.exceptions.SaldoInsuficienteException;
 import com.unisul.tcc.exceptions.SaqueInvalidoException;
@@ -14,7 +15,6 @@ import com.unisul.tcc.exceptions.TransferenciaInvalidaException;
 
 public class TransferenciaTest {
 	private Conta contaOrigem, contaDestino;
-	private Transferencia transferencia;
 	
 	@Before
 	public void setUp() {
@@ -32,11 +32,6 @@ public class TransferenciaTest {
 		contaDestino.setNumeroAgencia(1235);
 		contaDestino.setNumeroConta(123456899);
 		contaDestino.setBanco(banco);
-	
-		transferencia = new Transferencia();
-		transferencia.setContaOrigem(contaOrigem);
-		transferencia.setContaDestino(contaDestino);
-		transferencia.setDataTransferencia(Calendar.getInstance());
 	}
 	
 	@Test
@@ -44,12 +39,17 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(2500d);
 		contaDestino.setSaldoAtual(3500d);
 		
-		transferencia.setValor(500d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.construir();
 		
 		double saldoEsperadoContaOrigem = 2000d;
 		double saldoEsperadoContaDestino = 4000d;
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 		
 		assertEquals(saldoEsperadoContaOrigem, contaOrigem.getSaldoAtual());
 		assertEquals(saldoEsperadoContaDestino, contaDestino.getSaldoAtual());
@@ -60,9 +60,14 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(3850d);
 		contaDestino.setSaldoAtual(5000d);
 		
-		transferencia.setValor(3851d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(3851d)
+				.naDataDe(Calendar.getInstance())
+				.construir();
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 	}
 	
 	@Test(expected = SaqueInvalidoException.class)
@@ -70,9 +75,14 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(3500d);
 		contaDestino.setSaldoAtual(1500d);
 		
-		transferencia.setValor(-15d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(-15d)
+				.naDataDe(Calendar.getInstance())
+				.construir();
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 	}
 	
 	@Test
@@ -80,9 +90,14 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(5000d);
 		contaDestino.setSaldoAtual(3000d);
 		
-		transferencia.setValor(5000d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(5000d)
+				.naDataDe(Calendar.getInstance())
+				.construir();		
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 		
 		double saldoEsperadoContaOrigem = 0d;
 		double saldoEsperadoContaDestino = 8000d;
@@ -96,36 +111,56 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(500d);
 		contaDestino.setSaldoAtual(1000d);
 		
-		transferencia.setValor(0d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(0d)
+				.naDataDe(Calendar.getInstance())
+				.construir();	
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void naoDeveRealizarTransferenciaSemContaOrigem() {
 		contaDestino.setSaldoAtual(3500d);
+	
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(null)
+				.paraAConta(contaDestino)
+				.comValorDe(350d)
+				.naDataDe(Calendar.getInstance())
+				.construir();		
 		
-		transferencia.setValor(350d);
-		
-		transferencia.transferir(null, contaDestino);
+		transferencia.transferir();
 	}
 	
 	@Test(expected = RuntimeException.class)
 	public void naoDeveRealizarTransferenciaSemContaDestino() {
 		contaOrigem.setSaldoAtual(3500d);
 		
-		transferencia.setValor(350d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(null)
+				.comValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.construir();		
 		
-		transferencia.transferir(contaOrigem, null);
+		transferencia.transferir();
 	}
 	
 	@Test(expected = TransferenciaInvalidaException.class)
 	public void naoDeveRealizarTransferenciaComMesmaContaDeOrigemEDestino() {
 		contaOrigem.setSaldoAtual(500d);
 		
-		transferencia.setValor(250d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaOrigem)
+				.comValorDe(250d)
+				.naDataDe(Calendar.getInstance())
+				.construir();
 		
-		transferencia.transferir(contaOrigem, contaOrigem);
+		transferencia.transferir();
 	}
 	
 	@Test(expected = DataInvalidaException.class)
@@ -133,12 +168,16 @@ public class TransferenciaTest {
 		contaOrigem.setSaldoAtual(5600d);
 		contaDestino.setSaldoAtual(3500d);
 
-		Calendar dataFutura = transferencia.getDataTransferencia();
+		Calendar dataFutura = Calendar.getInstance();
 		dataFutura.add(Calendar.DAY_OF_MONTH, 2);
 		
-		transferencia.setDataTransferencia(dataFutura);
-		transferencia.setValor(500d);
+		Transferencia transferencia = new CriadorDeTransferencia()
+				.daConta(contaOrigem)
+				.paraAConta(contaDestino)
+				.comValorDe(500d)
+				.naDataDe(dataFutura)
+				.construir();
 		
-		transferencia.transferir(contaOrigem, contaDestino);
+		transferencia.transferir();
 	}
 }

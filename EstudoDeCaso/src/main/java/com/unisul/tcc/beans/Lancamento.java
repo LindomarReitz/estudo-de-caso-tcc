@@ -27,85 +27,69 @@ public class Lancamento {
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
-	
+
 	private String descricao;
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_lancamento")
 	private Calendar data;
-	
+
 	private Double valor;
-	
+
 	private String observacao;
-	
+
 	@Transient
 	private TipoLancamento tipoLancamento;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_conta")
 	private Conta conta;
 
-	public Long getId() {
-		return id;
+	public Lancamento(Long id, String descricao, Calendar data, Double valor,
+			String observacao, TipoLancamento tipoLancamento, Conta conta) {
+		this.id = id;
+		this.descricao = descricao;
+		this.data = data;
+		this.valor = valor;
+		this.observacao = observacao;
+		this.tipoLancamento = tipoLancamento;
+		this.conta = conta;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getId() {
+		return id;
 	}
 
 	public String getDescricao() {
 		return descricao;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
 	public Calendar getData() {
 		return data;
-	}
-
-	public void setData(Calendar data) {
-		this.data = data;
 	}
 
 	public Double getValor() {
 		return valor;
 	}
 
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
 	public String getObservacao() {
 		return observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
 	}
 
 	public TipoLancamento getTipoLancamento() {
 		return tipoLancamento;
 	}
 
-	public void setTipoLancamento(TipoLancamento tipoLancamento) {
-		this.tipoLancamento = tipoLancamento;
-	}
-
 	public Conta getConta() {
 		return conta;
 	}
 
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
 	public void realizarLancamento() {
 		if (this.data.after(Calendar.getInstance())) {
-			throw new DataInvalidaException("Data do lançamento não pode ser no futuro");
+			throw new DataInvalidaException(
+					"Data do lançamento não pode ser no futuro");
 		}
-		
+
 		if (tipoLancamento.equals(TipoLancamento.SAQUE)) {
 			sacar(this.valor);
 		} else if (tipoLancamento.equals(TipoLancamento.DEPOSITO)) {
@@ -123,7 +107,7 @@ public class Lancamento {
 			throw new SaldoInsuficienteException(
 					"Não se pode efetuar um saque com o valor maior que o saldo!");
 		}
-		
+
 		conta.setSaldoAtual(conta.getSaldoAtual() - valor);
 	}
 
@@ -132,7 +116,7 @@ public class Lancamento {
 			throw new DepositoInvalidoException(
 					"Depósito não pode ser feito com valores menores ou iguais a zero!");
 		}
-		
+
 		conta.setSaldoAtual(conta.getSaldoAtual() + valor);
 	}
 }

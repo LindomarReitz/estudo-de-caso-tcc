@@ -1,5 +1,6 @@
 package com.unisul.tcc.services;
 
+import static com.unisul.tcc.beans.TipoLancamento.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
@@ -16,7 +17,7 @@ import org.junit.Test;
 
 import com.unisul.tcc.beans.Conta;
 import com.unisul.tcc.beans.Lancamento;
-import com.unisul.tcc.beans.TipoLancamento;
+import com.unisul.tcc.builders.CriadorDeLancamento;
 import com.unisul.tcc.dao.LancamentoDAO;
 
 public class LancamentoServiceTest {
@@ -35,25 +36,26 @@ public class LancamentoServiceTest {
 	public void deveListarLancamentosCadastrados() {
 		List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 		
-		lancamento = new Lancamento();
-		lancamento.setConta(new Conta());
-		lancamento.setDescricao("Lancamento 1");
-		lancamento.setData(Calendar.getInstance());
-		lancamento.setTipoLancamento(TipoLancamento.SAQUE);
-		lancamento.setValor(500d);
-		lancamento.setObservacao("Lançamento");
+		Lancamento lancamento1 = new CriadorDeLancamento()
+				.comId(1L)
+				.comADescricao("Lancamento 1")
+				.paraAConta(new Conta())
+				.noValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
+
+		Lancamento lancamento2 = new CriadorDeLancamento()
+				.comId(2L)
+				.comADescricao("Lancamento 2")
+				.paraAConta(new Conta())
+				.noValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
 		
-		lancamentos.add(lancamento);
-		
-		lancamento = new Lancamento();
-		lancamento.setConta(new Conta());
-		lancamento.setDescricao("Lancamento 2");
-		lancamento.setData(Calendar.getInstance());
-		lancamento.setTipoLancamento(TipoLancamento.SAQUE);
-		lancamento.setValor(600d);
-		lancamento.setObservacao("Lançamento");
-		
-		lancamentos.add(lancamento);
+		lancamentos.add(lancamento1);
+		lancamentos.add(lancamento2);
 		
 		lancamentoService.listarTodos();
 		
@@ -62,19 +64,24 @@ public class LancamentoServiceTest {
 		int tamanhoEsperadoDaLista = 2;
 		
 		assertEquals(tamanhoEsperadoDaLista, lancamentos.size());
+		
+		assertEquals(1L, lancamentos.get(0).getId());
 		assertEquals("Lancamento 1", lancamentos.get(0).getDescricao());
+
+		assertEquals(2L, lancamentos.get(1).getId());
 		assertEquals("Lancamento 2", lancamentos.get(1).getDescricao());
 	}
 	
 	@Test
 	public void deveCadastrarUmLancamento() {
-		lancamento = new Lancamento();
-		lancamento.setConta(new Conta());
-		lancamento.setDescricao("Lancamento");
-		lancamento.setData(Calendar.getInstance());
-		lancamento.setTipoLancamento(TipoLancamento.SAQUE);
-		lancamento.setValor(500d);
-		lancamento.setObservacao("Lançamento");
+		Lancamento lancamento = new CriadorDeLancamento()
+				.comId(1L)
+				.comADescricao("Lancamento 1")
+				.paraAConta(new Conta())
+				.noValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
 		
 		lancamentoService.cadastrarLancamento(lancamento);
 		
@@ -92,17 +99,25 @@ public class LancamentoServiceTest {
 	
 	@Test
 	public void deveAtualizarUmLancamento() {
-		lancamento = new Lancamento();
-		lancamento.setConta(new Conta());
-		lancamento.setDescricao("Lancamento");
-		lancamento.setData(Calendar.getInstance());
-		lancamento.setTipoLancamento(TipoLancamento.SAQUE);
-		lancamento.setValor(500d);
-		lancamento.setObservacao("Lançamento");
+		Lancamento lancamento = new CriadorDeLancamento()
+				.comId(1L)
+				.comADescricao("Lancamento 1")
+				.paraAConta(new Conta())
+				.noValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
+
+		Lancamento lancamentoAtualizado = new CriadorDeLancamento()
+				.comId(1L)
+				.comADescricao("Lancamento atualizado")
+				.paraAConta(new Conta())
+				.noValorDe(700d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
 		
-		lancamento.setValor(700d);
-		
-		lancamentoService.atualizarLancamento(lancamento);
+		lancamentoService.atualizarLancamento(lancamentoAtualizado);
 		
 		verify(lancamentoDAO, atMost(1)).atualizar(lancamento);
 	}
@@ -118,14 +133,14 @@ public class LancamentoServiceTest {
 
 	@Test
 	public void deveExcluirUmLancamento() {
-		lancamento = new Lancamento();
-		lancamento.setId(2L);
-		lancamento.setConta(new Conta());
-		lancamento.setDescricao("Lancamento");
-		lancamento.setData(Calendar.getInstance());
-		lancamento.setTipoLancamento(TipoLancamento.SAQUE);
-		lancamento.setValor(500d);
-		lancamento.setObservacao("Lançamento");
+		Lancamento lancamento = new CriadorDeLancamento()
+				.comId(1L)
+				.comADescricao("Lancamento")
+				.paraAConta(new Conta())
+				.noValorDe(500d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
 		
 		lancamentoService.excluirLancamento(lancamento.getId());
 		
