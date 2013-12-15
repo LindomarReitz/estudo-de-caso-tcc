@@ -3,7 +3,7 @@ package com.unisul.tcc.services;
 import java.util.List;
 
 import com.unisul.tcc.beans.Lancamento;
-import com.unisul.tcc.dao.LancamentoDAO;
+import com.unisul.tcc.daos.LancamentoDAO;
 
 public class LancamentoService {
 	private LancamentoDAO lancamentoDAO;

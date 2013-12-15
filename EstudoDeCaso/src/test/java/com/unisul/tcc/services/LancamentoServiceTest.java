@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.unisul.tcc.beans.Conta;
 import com.unisul.tcc.beans.Lancamento;
 import com.unisul.tcc.builders.CriadorDeLancamento;
-import com.unisul.tcc.dao.LancamentoDAO;
+import com.unisul.tcc.daos.LancamentoDAO;
 
 public class LancamentoServiceTest {
 	private LancamentoService lancamentoService;
