@@ -4,6 +4,8 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -38,7 +39,8 @@ public class Lancamento {
 
 	private String observacao;
 
-	@Transient
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_lancamento")
 	private TipoLancamento tipoLancamento;
 
 	@ManyToOne
@@ -56,32 +58,64 @@ public class Lancamento {
 		this.conta = conta;
 	}
 
+	public Lancamento() {
+
+	}
+
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescricao() {
 		return descricao;
 	}
 
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Calendar getData() {
 		return data;
+	}
+
+	public void setData(Calendar data) {
+		this.data = data;
 	}
 
 	public Double getValor() {
 		return valor;
 	}
 
+	public void setValor(Double valor) {
+		this.valor = valor;
+	}
+
 	public String getObservacao() {
 		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 	public TipoLancamento getTipoLancamento() {
 		return tipoLancamento;
 	}
 
+	public void setTipoLancamento(TipoLancamento tipoLancamento) {
+		this.tipoLancamento = tipoLancamento;
+	}
+
 	public Conta getConta() {
 		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
 	public void realizarLancamento() {
@@ -111,7 +145,7 @@ public class Lancamento {
 		conta.setSaldoAtual(conta.getSaldoAtual() - valor);
 	}
 
-	public void depositar(double valor) {
+	private void depositar(double valor) {
 		if (valor <= 0) {
 			throw new DepositoInvalidoException(
 					"Depósito não pode ser feito com valores menores ou iguais a zero!");

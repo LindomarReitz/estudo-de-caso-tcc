@@ -30,6 +30,18 @@ public class Usuario {
 	
 	private String senha;
 
+	public Usuario(Long id, String nome, Calendar dataNascimento, String login, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.dataNascimento = dataNascimento;
+		this.login = login;
+		this.senha = senha;
+	}
+	
+	public Usuario() {
+		
+	}
+
 	public Long getId() {
 		return id;
 	}

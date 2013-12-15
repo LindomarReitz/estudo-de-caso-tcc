@@ -17,6 +17,15 @@ public class Banco {
 	
 	private String nome;
 
+	public Banco(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
+	
+	public Banco() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}

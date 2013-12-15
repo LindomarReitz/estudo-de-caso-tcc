@@ -81,7 +81,22 @@ public class LancamentoTest {
 
 		lancamento.realizarLancamento();
 	}
-
+	
+	@Test(expected = SaldoInsuficienteException.class)
+	public void naoDeveRealizarSaqueComValorMaiorQueOSaldo() {
+		conta.setSaldoAtual(1500d);
+		
+		Lancamento lancamento = new CriadorDeLancamento()
+				.paraAConta(conta)
+				.comADescricao("Sacando mais do que tenho")
+				.noValorDe(1600d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(SAQUE)
+				.construir();
+		
+		lancamento.realizarLancamento();
+	}
+	
 	@Test
 	public void deveRealizarSaqueComValorTotalDaConta() {
 		conta.setSaldoAtual(5000d);
@@ -100,21 +115,6 @@ public class LancamentoTest {
 
 		assertEquals(saldoAtualEsperado, conta.getSaldoAtual());
 	}
-	
-	@Test(expected = SaldoInsuficienteException.class)
-	public void naoDeveRealizarSaqueComValorMaiorQueOSaldo() {
-		conta.setSaldoAtual(1500d);
-		
-		Lancamento lancamento = new CriadorDeLancamento()
-				.paraAConta(conta)
-				.comADescricao("Sacando mais do que tenho")
-				.noValorDe(1600d)
-				.naDataDe(Calendar.getInstance())
-				.doTipo(SAQUE)
-				.construir();
-		
-		lancamento.realizarLancamento();
-	}
 
 	@Test
 	public void deveRealizarUmDeposito() {
@@ -130,9 +130,9 @@ public class LancamentoTest {
 
 		lancamento.realizarLancamento();
 
-		double resultadoEsperado = 5250d;
+		double saldoAtualEsperado = 5250d;
 
-		assertEquals(resultadoEsperado, conta.getSaldoAtual());
+		assertEquals(saldoAtualEsperado, conta.getSaldoAtual());
 	}
 
 	@Test(expected = DepositoInvalidoException.class)

@@ -9,35 +9,34 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
-import com.unisul.tcc.beans.Lancamento;
-import com.unisul.tcc.beans.TipoLancamento;
+import com.unisul.tcc.beans.Transferencia;
 
-public class LancamentoDAO implements IGenericDAO<Lancamento>{
+public class TransferenciaDAO implements IGenericDAO<Transferencia> {
 	private EntityManagerFactory emf;
 	
-	public LancamentoDAO(EntityManagerFactory factory) {
+	public TransferenciaDAO(EntityManagerFactory factory) {
 		emf = PersistenceManager.getIstance().getEntityManagerFactory();
 	}
-
+	
 	@Override
-	public List<Lancamento> listarTodos() {
+	public List<Transferencia> listarTodos() {
 		EntityManager entityManager = emf.createEntityManager();
 		try {
-			return entityManager.createQuery("from Lancamento", Lancamento.class).getResultList();
+			return entityManager.createQuery("from Transferencia", Transferencia.class).getResultList();
 		} finally {
 			entityManager.close();
 		}
 	}
 
 	@Override
-	public void salvar(Lancamento lancamento) {
+	public void salvar(Transferencia transferencia) {
 		EntityManager entityManager = emf.createEntityManager();
 		try {
 			EntityTransaction transaction = entityManager.getTransaction();
 			try {
 				transaction.begin();
 
-				entityManager.persist(lancamento);
+				entityManager.persist(transferencia);
 				
 				transaction.commit();
 			} catch (PersistenceException e) {
@@ -53,16 +52,16 @@ public class LancamentoDAO implements IGenericDAO<Lancamento>{
 	}
 
 	@Override
-	public void atualizar(Lancamento lancamento) {
+	public void atualizar(Transferencia transferencia) {
 		EntityManager entityManager = emf.createEntityManager();
 		try {
 			EntityTransaction transaction = entityManager.getTransaction();
 			try {
 				transaction.begin();
-				Lancamento lancamentoEncontrado = entityManager.find(Lancamento.class, lancamento.getId());
+				Transferencia transferenciaEncontrada = entityManager.find(Transferencia.class, transferencia.getId());
 				
-				if (lancamentoEncontrado != null) {
-					entityManager.merge(lancamento);
+				if (transferenciaEncontrada != null) {
+					entityManager.merge(transferencia);
 				}
 				
 				transaction.commit();
@@ -84,12 +83,12 @@ public class LancamentoDAO implements IGenericDAO<Lancamento>{
 		try {
 			EntityTransaction transaction = entityManager.getTransaction();
 			try {
-				Lancamento lancamento = entityManager.find(Lancamento.class, id);
+				Transferencia transferencia = entityManager.find(Transferencia.class, id);
 				
-				if (lancamento != null) {
+				if (transferencia != null) {
 					transaction.begin();
 					
-					entityManager.remove(lancamento);
+					entityManager.remove(transferencia);
 
 					transaction.commit();
 				}
@@ -102,37 +101,22 @@ public class LancamentoDAO implements IGenericDAO<Lancamento>{
 			entityManager.close();
 		}
 	}
-	
+
 	@Override
-	public Lancamento buscarPeloId(Long id) {
+	public Transferencia buscarPeloId(Long id) {
 		EntityManager entityManager = emf.createEntityManager();
-		Lancamento lancamento = null;
+			Transferencia transferencia = null;
 			try {				
-				Query query = entityManager.createQuery("select l from Lancamento l where l.id = :id");
+				Query query = entityManager.createQuery("select t from Transferencia t where t.id = :id");
 				query.setParameter("id", id);
 				
-				lancamento = (Lancamento) query.getSingleResult();
+				transferencia = (Transferencia) query.getSingleResult();
 			} catch (NoResultException e) {
-				lancamento = null;
+				transferencia = null;
 			} finally {
 				entityManager.close();
 			}
 			
-		return lancamento;
-	}
-	
-	public List<Lancamento> buscarLancamentosPeloTipo(TipoLancamento tipoLancamento) {
-		EntityManager entityManager = emf.createEntityManager();
-		List<Lancamento> lancamentos = null;
-		try {				
-				Query query = entityManager.createQuery("select l from Lancamento l where l.tipoLancamento = :tipoLancamento");
-				query.setParameter("tipoLancamento", tipoLancamento);
-				
-				lancamentos = query.getResultList();
-			} finally {
-				entityManager.close();
-			}
-		
-		return lancamentos;
+		return transferencia;
 	}
 }

@@ -46,7 +46,22 @@ public class Conta {
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
+	
+	public Conta(Long id, String nome, int numeroAgencia, int numeroConta, Banco banco,
+			List<Lancamento> lancamentos, Double saldoAtual, Usuario usuario) {
+		this.id = id;
+		this.nome = nome;
+		this.numeroAgencia = numeroAgencia;
+		this.numeroConta = numeroConta;
+		this.lancamentos = lancamentos;
+		this.saldoAtual = saldoAtual;
+		this.usuario = usuario;
+	}
 
+	public Conta() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}

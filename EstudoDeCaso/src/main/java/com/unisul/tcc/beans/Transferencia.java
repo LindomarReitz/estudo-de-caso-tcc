@@ -49,25 +49,49 @@ public class Transferencia {
 		this.contaOrigem = contaOrigem;
 		this.contaDestino = contaDestino;
 	}
-
+	
+	public Transferencia() {
+		
+	}
+	
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Double getValor() {
 		return valor;
 	}
 
+	public void setValor(Double valor) {
+		this.valor = valor;
+	}
+
 	public Calendar getData() {
 		return data;
+	}
+
+	public void setData(Calendar data) {
+		this.data = data;
 	}
 
 	public Conta getContaOrigem() {
 		return contaOrigem;
 	}
 
+	public void setContaOrigem(Conta contaOrigem) {
+		this.contaOrigem = contaOrigem;
+	}
+
 	public Conta getContaDestino() {
 		return contaDestino;
+	}
+
+	public void setContaDestino(Conta contaDestino) {
+		this.contaDestino = contaDestino;
 	}
 
 	public void transferir() {
