@@ -8,6 +8,10 @@ import com.unisul.tcc.daos.LancamentoDAO;
 public class LancamentoService {
 	private LancamentoDAO lancamentoDAO;
 	
+	public LancamentoService() {
+		lancamentoDAO = new LancamentoDAO();
+	}
+	
 	public LancamentoService(LancamentoDAO lancamentoDAO) {
 		this.lancamentoDAO = lancamentoDAO;
 	}

@@ -15,8 +15,12 @@ import com.unisul.tcc.beans.TipoLancamento;
 public class LancamentoDAO implements IGenericDAO<Lancamento>{
 	private EntityManagerFactory emf;
 	
-	public LancamentoDAO(EntityManagerFactory factory) {
+	public LancamentoDAO() {
 		emf = PersistenceManager.getIstance().getEntityManagerFactory();
+	}
+	
+	public LancamentoDAO(EntityManagerFactory factory) {
+		emf = factory;
 	}
 
 	@Override

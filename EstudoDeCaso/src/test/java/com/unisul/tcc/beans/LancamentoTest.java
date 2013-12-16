@@ -1,5 +1,7 @@
 package com.unisul.tcc.beans;
 
+import static com.unisul.tcc.beans.TipoLancamento.DEPOSITO;
+import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
@@ -8,8 +10,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static com.unisul.tcc.beans.TipoLancamento.*;
 
 import com.unisul.tcc.builders.CriadorDeLancamento;
 import com.unisul.tcc.exceptions.DataInvalidaException;

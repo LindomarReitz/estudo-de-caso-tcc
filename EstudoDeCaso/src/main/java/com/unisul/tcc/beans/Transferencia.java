@@ -1,4 +1,7 @@
-package com.unisul.tcc.beans;
+	package com.unisul.tcc.beans;
+
+import static com.unisul.tcc.beans.TipoLancamento.DEPOSITO;
+import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
 
 import java.util.Calendar;
 
@@ -13,8 +16,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import static com.unisul.tcc.beans.TipoLancamento.*;
 
 import com.unisul.tcc.exceptions.DataInvalidaException;
 import com.unisul.tcc.exceptions.TransferenciaInvalidaException;
