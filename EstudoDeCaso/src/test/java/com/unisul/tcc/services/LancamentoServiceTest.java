@@ -1,10 +1,10 @@
 package com.unisul.tcc.services;
 
-import static com.unisul.tcc.beans.TipoLancamento.*;
+import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -85,7 +85,7 @@ public class LancamentoServiceTest {
 		
 		lancamentoService.cadastrarLancamento(lancamento);
 		
-		verify(lancamentoDAO, atMost(1)).salvar(lancamento);
+		verify(lancamentoDAO, times(1)).salvar(lancamento);
 	}
 	
 	@Test
@@ -108,18 +108,11 @@ public class LancamentoServiceTest {
 				.doTipo(SAQUE)
 				.construir();
 
-		Lancamento lancamentoAtualizado = new CriadorDeLancamento()
-				.comId(1L)
-				.comADescricao("Lancamento atualizado")
-				.paraAConta(new Conta())
-				.noValorDe(700d)
-				.naDataDe(Calendar.getInstance())
-				.doTipo(SAQUE)
-				.construir();
+		lancamento.setValor(700d);
 		
-		lancamentoService.atualizarLancamento(lancamentoAtualizado);
+		lancamentoService.atualizarLancamento(lancamento);
 		
-		verify(lancamentoDAO, atMost(1)).atualizar(lancamento);
+		verify(lancamentoDAO, times(1)).atualizar(lancamento);
 	}
 	
 	@Test
@@ -144,6 +137,6 @@ public class LancamentoServiceTest {
 		
 		lancamentoService.excluirLancamento(lancamento.getId());
 		
-		verify(lancamentoDAO, atMost(1)).excluir(lancamento.getId());
+		verify(lancamentoDAO, times(1)).excluir(lancamento.getId());
 	}
 }
