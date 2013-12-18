@@ -35,4 +35,8 @@ public class LancamentoService {
 	public void excluirLancamento(Long id) {
 		lancamentoDAO.excluir(id);
 	}
+	
+	public Lancamento buscarLancamentoPeloId(Long id) {
+		return lancamentoDAO.buscarPeloId(id);
+	}
 }

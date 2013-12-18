@@ -22,14 +22,14 @@
 			<td>${lancamento.observacao}</td>
 			<td>Conta</td>
 			<td>
-				<button class="btn btn-primary">Editar</button>
-				<button type="button" class="btn btn-danger">Excluir</button>
+				<a class="btn btn-primary" href="editar?id=${lancamento.id}">Editar</a>
+				<a class="btn btn-danger" href="excluirLancamento?id=${lancamento.id}">Excluir</a>
 			</td>
 		</tr>
 	</c:forEach>
 </table>
 <div align="center">
-	<form action="cadastrarLancamento">
+	<form action="cadastrarLancamento" method="post">
 		<input type="submit" class="btn btn-success" value="Cadastrar" />
 	</form>
 </div>

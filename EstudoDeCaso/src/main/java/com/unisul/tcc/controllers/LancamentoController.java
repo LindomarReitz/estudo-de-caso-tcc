@@ -33,19 +33,38 @@ public class LancamentoController {
 	}
 	
 	@RequestMapping(value = "salvarLancamento", method = RequestMethod.POST)
-	public void salvar(@ModelAttribute(value="lancamento") Lancamento lancamento) throws ParseException {
+	public String salvar(@ModelAttribute(value="lancamento") Lancamento lancamento) throws ParseException {
 		LancamentoService service = new LancamentoService();
 		
 		lancamento.setData(Calendar.getInstance());
 	
 		service.cadastrarLancamento(lancamento);
+	
+		return "listagemLancamentos";
 	}
 	
-	public void editar() {
+	@RequestMapping(value = "editar")
+	public String editarLancamento(Model model, Long id) {
+		LancamentoService service = new LancamentoService();
+		Lancamento lancamento = service.buscarLancamentoPeloId(id);
 		
+		model.addAttribute("lancamento", lancamento);
+
+		return "edicao_lancamento";	
 	}
 	
-	public void excluir() {
+	@RequestMapping(value = "editarLancamento", method = RequestMethod.POST)
+	public void editar(@ModelAttribute(value="lancamento") Lancamento lancamento) {
+		LancamentoService service = new LancamentoService();
+		lancamento.setData(Calendar.getInstance());
+		service.atualizarLancamento(lancamento);
+	}
+	
+	@RequestMapping(value = "excluirLancamento")
+	public String excluir(Long id) {
+		LancamentoService service = new LancamentoService();
+		service.excluirLancamento(id);
 		
+		return "sucesso";
 	}
 }

@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="bootstrap/js/jquery.mask.min.js" type="text/javascript"></script>
