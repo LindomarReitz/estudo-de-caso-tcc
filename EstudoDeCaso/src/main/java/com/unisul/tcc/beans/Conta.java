@@ -1,9 +1,11 @@
 package com.unisul.tcc.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,11 +36,11 @@ public class Conta {
 	@JoinColumn(name = "id_banco")
 	private Banco banco;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "contas_lancamentos",
 			joinColumns = @JoinColumn(name = "id_conta"),
 			inverseJoinColumns = @JoinColumn(name = "id_lancamento"))
-	private List<Lancamento> lancamentos;
+	private List<Lancamento> lancamentos = new ArrayList<Lancamento>();
 	
 	@Column(name = "saldo_atual")
 	private Double saldoAtual;
@@ -124,5 +126,20 @@ public class Conta {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public void calcularSaldoAtual() {
+		Double totalSaque = 0d;
+		Double totalDeposito = 0d;
+		
+		for (Lancamento lancamento : lancamentos) {
+			if (lancamento.getTipoLancamento().equals(TipoLancamento.SAQUE)) {
+				totalSaque += lancamento.getValor();
+			} else if (lancamento.getTipoLancamento().equals(TipoLancamento.DEPOSITO)) {
+				totalDeposito += lancamento.getValor();
+			}
+		}
+		
+		saldoAtual = totalDeposito - totalSaque;
 	}
 }

@@ -46,6 +46,10 @@ public class Lancamento {
 	@ManyToOne
 	@JoinColumn(name = "id_conta")
 	private Conta conta;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_transferencia")
+	private Transferencia transferencia;
 
 	public Lancamento(Long id, String descricao, Calendar data, Double valor,
 			String observacao, TipoLancamento tipoLancamento, Conta conta) {
@@ -118,20 +122,32 @@ public class Lancamento {
 		this.conta = conta;
 	}
 
-	public void realizarLancamento() {
+	public Transferencia getTransferencia() {
+		return transferencia;
+	}
+
+	public void setTransferencia(Transferencia transferencia) {
+		this.transferencia = transferencia;
+	}
+	
+	public void lancar() {
 		if (this.data.after(Calendar.getInstance())) {
 			throw new DataInvalidaException(
 					"Data do lançamento não pode ser no futuro");
 		}
 
+		conta.calcularSaldoAtual();
+		
 		if (tipoLancamento.equals(TipoLancamento.SAQUE)) {
-			sacar(this.valor);
+			sacar();
 		} else if (tipoLancamento.equals(TipoLancamento.DEPOSITO)) {
-			depositar(this.valor);
+			depositar();
 		}
+		
+		conta.calcularSaldoAtual();
 	}
 
-	private void sacar(double valor) {
+	private void sacar() {
 		if (valor <= 0) {
 			throw new SaqueInvalidoException(
 					"Saque não pode ser feito com valores menores ou iguais a zero!");
@@ -141,16 +157,16 @@ public class Lancamento {
 			throw new SaldoInsuficienteException(
 					"Não se pode efetuar um saque com o valor maior que o saldo!");
 		}
-
-		conta.setSaldoAtual(conta.getSaldoAtual() - valor);
+		
+		conta.getLancamentos().add(this);
 	}
 
-	private void depositar(double valor) {
+	private void depositar() {
 		if (valor <= 0) {
 			throw new DepositoInvalidoException(
 					"Depósito não pode ser feito com valores menores ou iguais a zero!");
 		}
-
-		conta.setSaldoAtual(conta.getSaldoAtual() + valor);
+		
+		conta.getLancamentos().add(this);
 	}
 }

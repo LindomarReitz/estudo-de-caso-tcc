@@ -35,9 +35,17 @@ public class LancamentoTest {
 
 	@Test
 	public void deveRealizarUmSaque() {
-		conta.setSaldoAtual(5000d);
-
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento deposito = new CriadorDeLancamento()
+				.paraAConta(conta)
+				.comADescricao("Salário")
+				.noValorDe(5000d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(DEPOSITO)
+				.construir();
+		
+		deposito.lancar();
+		
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Pagamento de conta de luz")
 				.noValorDe(150d)
@@ -45,8 +53,8 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 
-		lancamento.realizarLancamento();
-
+		saque.lancar();
+		
 		double saldoAtualEsperado = 4850d;
 
 		Assert.assertEquals(saldoAtualEsperado, conta.getSaldoAtual());
@@ -54,9 +62,7 @@ public class LancamentoTest {
 
 	@Test(expected = SaqueInvalidoException.class)
 	public void naoDeveRealizarUmSaqueComValorNegativo() {
-		conta.setSaldoAtual(500d);
-		
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Lancamento com valor negativo")
 				.noValorDe(-15d)
@@ -64,14 +70,12 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 
 	@Test(expected = SaqueInvalidoException.class)
 	public void naoDeveRealizarUmSaqueComValorZero() {
-		conta.setSaldoAtual(5000d);
-		
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Lancamento com valor zero")
 				.noValorDe(0d)
@@ -79,14 +83,12 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 	
 	@Test(expected = SaldoInsuficienteException.class)
 	public void naoDeveRealizarSaqueComValorMaiorQueOSaldo() {
-		conta.setSaldoAtual(1500d);
-		
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Sacando mais do que tenho")
 				.noValorDe(1600d)
@@ -94,14 +96,22 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 		
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 	
 	@Test
 	public void deveRealizarSaqueComValorTotalDaConta() {
-		conta.setSaldoAtual(5000d);
+		Lancamento deposito = new CriadorDeLancamento()
+			.paraAConta(conta)
+			.comADescricao("Salário")
+			.noValorDe(5000d)
+			.naDataDe(Calendar.getInstance())
+			.doTipo(DEPOSITO)
+			.construir();
 
-		Lancamento lancamento = new CriadorDeLancamento()
+		deposito.lancar();
+
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Saque total da conta")
 				.noValorDe(5000d)
@@ -109,7 +119,7 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 		
-		lancamento.realizarLancamento();
+		saque.lancar();
 
 		double saldoAtualEsperado = 0d;
 
@@ -118,9 +128,17 @@ public class LancamentoTest {
 
 	@Test
 	public void deveRealizarUmDeposito() {
-		conta.setSaldoAtual(5000d);
+		Lancamento deposito = new CriadorDeLancamento()
+				.paraAConta(conta)
+				.comADescricao("Salário")
+				.noValorDe(5000d)
+				.naDataDe(Calendar.getInstance())
+				.doTipo(DEPOSITO)
+				.construir();
 		
-		Lancamento lancamento = new CriadorDeLancamento()
+		deposito.lancar();
+
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Dinheiro que sobrou")
 				.noValorDe(250d)
@@ -128,8 +146,8 @@ public class LancamentoTest {
 				.doTipo(DEPOSITO)
 				.construir();
 
-		lancamento.realizarLancamento();
-
+		saque.lancar();
+		
 		double saldoAtualEsperado = 5250d;
 
 		assertEquals(saldoAtualEsperado, conta.getSaldoAtual());
@@ -137,9 +155,7 @@ public class LancamentoTest {
 
 	@Test(expected = DepositoInvalidoException.class)
 	public void naoDeveRealizarUmDepositoComValorNegativo() {
-		conta.setSaldoAtual(500d);
-
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Depósito de valor negativo")
 				.noValorDe(-1d)
@@ -147,14 +163,12 @@ public class LancamentoTest {
 				.doTipo(DEPOSITO)
 				.construir();
 
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 
 	@Test(expected = DepositoInvalidoException.class)
 	public void naoDeveRealizarUmDepositoComValorZero() {
-		conta.setSaldoAtual(5000d);
-		
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Depositando nenhum valor")
 				.noValorDe(0d)
@@ -162,17 +176,15 @@ public class LancamentoTest {
 				.doTipo(DEPOSITO)
 				.construir();
 
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 
 	@Test(expected = DataInvalidaException.class)
 	public void naoDeveRealizarUmLancamentoComDataNoFuturo() {
-		conta.setSaldoAtual(5000d);
-
 		Calendar dataFutura = Calendar.getInstance();
 		dataFutura.add(Calendar.DAY_OF_MONTH, 3);
 
-		Lancamento lancamento = new CriadorDeLancamento()
+		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Saque do futuro")
 				.noValorDe(0d)
@@ -180,6 +192,6 @@ public class LancamentoTest {
 				.doTipo(SAQUE)
 				.construir();
 
-		lancamento.realizarLancamento();
+		saque.lancar();
 	}
 }

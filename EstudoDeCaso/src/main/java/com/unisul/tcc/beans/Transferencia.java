@@ -1,7 +1,4 @@
-	package com.unisul.tcc.beans;
-
-import static com.unisul.tcc.beans.TipoLancamento.DEPOSITO;
-import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
+package com.unisul.tcc.beans;
 
 import java.util.Calendar;
 
@@ -18,6 +15,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.unisul.tcc.exceptions.DataInvalidaException;
+import com.unisul.tcc.exceptions.SaldoInsuficienteException;
+import com.unisul.tcc.exceptions.SaqueInvalidoException;
 import com.unisul.tcc.exceptions.TransferenciaInvalidaException;
 
 @Entity
@@ -111,24 +110,36 @@ public class Transferencia {
 					"Data de transferência não pode ser no futuro!");
 		}
 
-		Lancamento saqueContaOrigem = new Lancamento(0L, "Saque", Calendar.getInstance(), valor,  "Transferência", SAQUE, contaOrigem);
-//		saqueContaOrigem.setDescricao("Saque");
-//		saqueContaOrigem.setData(Calendar.getInstance());
-//		saqueContaOrigem.setConta(contaOrigem);
-//		saqueContaOrigem.setValor(this.valor);
-//		saqueContaOrigem.setTipoLancamento(TipoLancamento.SAQUE);
-//		saqueContaOrigem.setObservacao("Transferência");
-
-		saqueContaOrigem.realizarLancamento();
-
-		Lancamento saqueContaDestino = new Lancamento(0L, "Depósito", Calendar.getInstance(), valor,  "Transferência", DEPOSITO, contaDestino);
-//		saqueContaDestino.setDescricao("Depósito");
-//		saqueContaDestino.setData(Calendar.getInstance());
-//		saqueContaDestino.setConta(contaDestino);
-//		saqueContaDestino.setValor(this.valor);
-//		saqueContaDestino.setTipoLancamento(TipoLancamento.DEPOSITO);
-//		saqueContaDestino.setObservacao("Transferência");
-
-		saqueContaDestino.realizarLancamento();
+		if (valor > contaOrigem.getSaldoAtual()) {
+			throw new SaldoInsuficienteException(
+					"Não se pode transferir com valor acima do saldo da conta origem!");
+		}
+		
+		if (valor <= 0) {
+			throw new SaqueInvalidoException(
+					"Transferência não pode ser realizada com valores menores ou iguais a zero!");
+		}
+		
+		Lancamento lancamentoContaOrigem = new Lancamento();
+		lancamentoContaOrigem.setConta(contaOrigem);
+		lancamentoContaOrigem.setDescricao("Transferência");
+		lancamentoContaOrigem.setValor(valor);
+		lancamentoContaOrigem.setData(data);
+		lancamentoContaOrigem.setObservacao("");
+		lancamentoContaOrigem.setTipoLancamento(TipoLancamento.SAQUE);
+		lancamentoContaOrigem.setTransferencia(this);
+		
+		lancamentoContaOrigem.lancar();
+		
+		Lancamento lancamentoContaDestino = new Lancamento();
+		lancamentoContaDestino.setConta(contaDestino);
+		lancamentoContaDestino.setDescricao("Transferência");
+		lancamentoContaDestino.setValor(valor);
+		lancamentoContaDestino.setData(data);
+		lancamentoContaDestino.setObservacao("");
+		lancamentoContaDestino.setTipoLancamento(TipoLancamento.DEPOSITO);
+		lancamentoContaDestino.setTransferencia(this);
+		
+		lancamentoContaDestino.lancar();
 	}
 }

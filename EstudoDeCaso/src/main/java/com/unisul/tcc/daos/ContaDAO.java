@@ -14,15 +14,19 @@ import com.unisul.tcc.beans.Conta;
 public class ContaDAO implements IGenericDAO<Conta> {
 	private EntityManagerFactory emf;
 	
-	public ContaDAO(EntityManagerFactory factory) {
+	public ContaDAO() {
 		emf = PersistenceManager.getIstance().getEntityManagerFactory();
+	}
+
+	public ContaDAO(EntityManagerFactory factory) {
+		this.emf = factory;
 	}
 	
 	@Override
 	public List<Conta> listarTodos() {
 		EntityManager entityManager = emf.createEntityManager();
 		try {
-			return entityManager.createQuery("from Conta", Conta.class).getResultList();
+			return entityManager.createQuery("from Conta c order by c.id asc", Conta.class).getResultList();
 		} finally {
 			entityManager.close();
 		}

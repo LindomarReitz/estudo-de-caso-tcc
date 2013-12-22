@@ -1,5 +1,6 @@
 package com.unisul.tcc.services;
 
+import static com.unisul.tcc.beans.TipoLancamento.DEPOSITO;
 import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -15,21 +16,47 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.unisul.tcc.beans.Banco;
 import com.unisul.tcc.beans.Conta;
 import com.unisul.tcc.beans.Lancamento;
 import com.unisul.tcc.builders.CriadorDeLancamento;
+import com.unisul.tcc.daos.ContaDAO;
 import com.unisul.tcc.daos.LancamentoDAO;
 
 public class LancamentoServiceTest {
 	private LancamentoService lancamentoService;
 	private LancamentoDAO lancamentoDAO;
 	private Lancamento lancamento;
+	private ContaDAO contaDAO;
+	private Conta conta;
 	
 	@Before
 	public void setUp() {
 		lancamentoDAO = mock(LancamentoDAO.class);
+		contaDAO = mock(ContaDAO.class);
 		
-		lancamentoService = new LancamentoService(lancamentoDAO);
+		lancamentoService = new LancamentoService(lancamentoDAO, contaDAO);
+		
+		conta = new Conta();
+		conta.setNome("Conta corrente");
+		conta.setNumeroAgencia(1234);
+		conta.setNumeroConta(13456698);
+
+		Banco banco = new Banco();
+		banco.setNome("Santander");
+
+		conta.setBanco(banco);
+		
+		Lancamento deposito = new CriadorDeLancamento()
+			.comId(1L)
+			.paraAConta(conta)
+			.comADescricao("Salário")
+			.noValorDe(5000d)
+			.naDataDe(Calendar.getInstance())
+			.doTipo(DEPOSITO)
+			.construir();
+		
+		deposito.lancar();
 	}
 	
 	@Test
@@ -75,9 +102,9 @@ public class LancamentoServiceTest {
 	@Test
 	public void deveCadastrarUmLancamento() {
 		Lancamento lancamento = new CriadorDeLancamento()
-				.comId(1L)
+				.comId(2L)
 				.comADescricao("Lancamento 1")
-				.paraAConta(new Conta())
+				.paraAConta(conta)
 				.noValorDe(500d)
 				.naDataDe(Calendar.getInstance())
 				.doTipo(SAQUE)
@@ -86,6 +113,7 @@ public class LancamentoServiceTest {
 		lancamentoService.cadastrarLancamento(lancamento);
 		
 		verify(lancamentoDAO, times(1)).salvar(lancamento);
+		verify(contaDAO, times(1)).atualizar(conta);
 	}
 	
 	@Test
@@ -100,19 +128,18 @@ public class LancamentoServiceTest {
 	@Test
 	public void deveAtualizarUmLancamento() {
 		Lancamento lancamento = new CriadorDeLancamento()
-				.comId(1L)
+				.comId(2L)
 				.comADescricao("Lancamento 1")
-				.paraAConta(new Conta())
+				.paraAConta(conta)
 				.noValorDe(500d)
 				.naDataDe(Calendar.getInstance())
 				.doTipo(SAQUE)
 				.construir();
 
-		lancamento.setValor(700d);
-		
 		lancamentoService.atualizarLancamento(lancamento);
 		
 		verify(lancamentoDAO, times(1)).atualizar(lancamento);
+		verify(contaDAO, times(1)).atualizar(conta);
 	}
 	
 	@Test
@@ -129,14 +156,17 @@ public class LancamentoServiceTest {
 		Lancamento lancamento = new CriadorDeLancamento()
 				.comId(1L)
 				.comADescricao("Lancamento")
-				.paraAConta(new Conta())
+				.paraAConta(conta)
 				.noValorDe(500d)
 				.naDataDe(Calendar.getInstance())
 				.doTipo(SAQUE)
 				.construir();
 		
-		lancamentoService.excluirLancamento(lancamento.getId());
+		when(lancamentoDAO.buscarPeloId(lancamento.getId())).thenReturn(lancamento);
 		
+		lancamentoService.excluirLancamento(lancamento.getId());
+	
+		verify(contaDAO, times(1)).atualizar(conta);
 		verify(lancamentoDAO, times(1)).excluir(lancamento.getId());
 	}
 }

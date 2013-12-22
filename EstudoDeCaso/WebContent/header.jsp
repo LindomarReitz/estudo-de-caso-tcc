@@ -3,9 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <head>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="bootstrap/js/jquery.mask.min.js" type="text/javascript"></script>
 <!-- Bootstrap -->
 <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="bootstrap/js/jquery.mask.min.js" type="text/javascript"></script>
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <title>Listagem de lançamentos</title>
 </head>
@@ -16,13 +16,13 @@
     		<button class="btn">Bancos</button>
 		</div>
 		<div class="btn-group">
-    		<button class="btn">Contas</button>
+    		<button id="btnContas" class="btn" onclick="location.href='listagemContas'">Contas</button>
 		</div>
 		<div class="btn-group">
-    		<button class="btn" onclick="location.href='listagemLancamentos'">Lançamentos</button>
+    		<button id="btnLancamentos" class="btn" onclick="location.href='listagemLancamentos'">Lançamentos</button>
 		</div>
 		<div class="btn-group">
-    		<button class="btn" onclick="location.href='listagemTransferencias'">Transferências</button>
+    		<button class="btn" onclick="location.href='#'">Transferências</button>
 		</div>
 	</div>
 <body>

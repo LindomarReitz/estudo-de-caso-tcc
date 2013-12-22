@@ -35,6 +35,11 @@ public class CriadorDeLancamento {
 		return this;
 	}
 	
+	public CriadorDeLancamento naDataDeHoje() {
+		this.data = Calendar.getInstance();
+		return this;
+	}
+	
 	public CriadorDeLancamento comADescricao(String descricao) {
 		this.descricao = descricao;
 		return this;
@@ -52,7 +57,6 @@ public class CriadorDeLancamento {
 	
 	public Lancamento construir() {
 		Lancamento lancamento = new Lancamento(id, descricao, data, valor, observacao, tipoLancamento, conta);
-		
 		return lancamento;
 	}
 }

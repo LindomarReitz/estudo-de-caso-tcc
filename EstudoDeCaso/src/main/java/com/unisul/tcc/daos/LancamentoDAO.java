@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
+import com.unisul.tcc.beans.Conta;
 import com.unisul.tcc.beans.Lancamento;
 import com.unisul.tcc.beans.TipoLancamento;
 
@@ -27,7 +28,7 @@ public class LancamentoDAO implements IGenericDAO<Lancamento>{
 	public List<Lancamento> listarTodos() {
 		EntityManager entityManager = emf.createEntityManager();
 		try {
-			return entityManager.createQuery("from Lancamento", Lancamento.class).getResultList();
+			return entityManager.createQuery("from Lancamento l order by l.id asc", Lancamento.class).getResultList();
 		} finally {
 			entityManager.close();
 		}
@@ -131,6 +132,21 @@ public class LancamentoDAO implements IGenericDAO<Lancamento>{
 		try {				
 				Query query = entityManager.createQuery("select l from Lancamento l where l.tipoLancamento = :tipoLancamento");
 				query.setParameter("tipoLancamento", tipoLancamento);
+				
+				lancamentos = query.getResultList();
+			} finally {
+				entityManager.close();
+			}
+		
+		return lancamentos;
+	}
+	
+	public List<Lancamento> buscarLancamentosPelaConta(Conta conta) {
+		EntityManager entityManager = emf.createEntityManager();
+		List<Lancamento> lancamentos = null;
+		try {				
+				Query query = entityManager.createQuery("select l from Lancamento l where l.conta = :conta");
+				query.setParameter("conta", conta);
 				
 				lancamentos = query.getResultList();
 			} finally {

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.unisul.tcc.builders.CriadorDeLancamento;
 import com.unisul.tcc.builders.CriadorDeTransferencia;
 import com.unisul.tcc.exceptions.DataInvalidaException;
 import com.unisul.tcc.exceptions.SaldoInsuficienteException;
@@ -15,6 +16,7 @@ import com.unisul.tcc.exceptions.TransferenciaInvalidaException;
 
 public class TransferenciaTest {
 	private Conta contaOrigem, contaDestino;
+	private Lancamento depositoContaOrigem, depositoContaDestino;
 	
 	@Before
 	public void setUp() {
@@ -32,12 +34,33 @@ public class TransferenciaTest {
 		contaDestino.setNumeroAgencia(1235);
 		contaDestino.setNumeroConta(123456899);
 		contaDestino.setBanco(banco);
+	
+		depositoContaOrigem = new CriadorDeLancamento()
+				.paraAConta(contaOrigem)
+				.comADescricao("Salário")
+				.noValorDe(2500d)
+				.naDataDeHoje()
+				.comAObservacao("Saldo inicial")
+				.doTipo(TipoLancamento.DEPOSITO)
+				.construir();
+		
+		depositoContaDestino = new CriadorDeLancamento()
+				.paraAConta(contaDestino)
+				.comADescricao("Salário")
+				.noValorDe(3500d)
+				.naDataDeHoje()
+				.comAObservacao("Saldo inicial")
+				.doTipo(TipoLancamento.DEPOSITO)
+				.construir();
 	}
 	
 	@Test
 	public void deveRealizarTransferencia() {
-		contaOrigem.setSaldoAtual(2500d);
-		contaDestino.setSaldoAtual(3500d);
+		depositoContaOrigem.setValor(2500d);
+		depositoContaOrigem.lancar();
+
+		depositoContaDestino.setValor(3500d);
+		depositoContaDestino.lancar();
 		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
@@ -57,8 +80,11 @@ public class TransferenciaTest {
 	
 	@Test(expected = SaldoInsuficienteException.class)
 	public void naoDeveRealizarTransferenciaComValorMaiorQueOSaldo() {
-		contaOrigem.setSaldoAtual(3850d);
-		contaDestino.setSaldoAtual(5000d);
+		depositoContaOrigem.setValor(3850d);
+		depositoContaOrigem.lancar();
+
+		depositoContaDestino.setValor(5000d);
+		depositoContaDestino.lancar();
 		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
@@ -72,9 +98,9 @@ public class TransferenciaTest {
 	
 	@Test(expected = SaqueInvalidoException.class)
 	public void naoDeveRealizarTransferenciaComValorNegativo() {
-		contaOrigem.setSaldoAtual(3500d);
-		contaDestino.setSaldoAtual(1500d);
-		
+		depositoContaOrigem.lancar();
+		depositoContaDestino.lancar();
+
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
 				.paraAConta(contaDestino)
@@ -87,8 +113,11 @@ public class TransferenciaTest {
 	
 	@Test
 	public void deveRealizarTransferenciaComValorTotalDaConta() {
-		contaOrigem.setSaldoAtual(5000d);
-		contaDestino.setSaldoAtual(3000d);
+		depositoContaOrigem.setValor(5000d);
+		depositoContaOrigem.lancar();
+
+		depositoContaDestino.setValor(3000d);
+		depositoContaDestino.lancar();
 		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
@@ -108,8 +137,8 @@ public class TransferenciaTest {
 	
 	@Test(expected = SaqueInvalidoException.class)
 	public void naoDeveRealizarTransferenciaComValorZero() {
-		contaOrigem.setSaldoAtual(500d);
-		contaDestino.setSaldoAtual(1000d);
+		depositoContaOrigem.lancar();
+		depositoContaDestino.lancar();
 		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
@@ -123,8 +152,6 @@ public class TransferenciaTest {
 	
 	@Test(expected = RuntimeException.class)
 	public void naoDeveRealizarTransferenciaSemContaOrigem() {
-		contaDestino.setSaldoAtual(3500d);
-	
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(null)
 				.paraAConta(contaDestino)
@@ -137,8 +164,6 @@ public class TransferenciaTest {
 	
 	@Test(expected = RuntimeException.class)
 	public void naoDeveRealizarTransferenciaSemContaDestino() {
-		contaOrigem.setSaldoAtual(3500d);
-		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
 				.paraAConta(null)
@@ -151,8 +176,6 @@ public class TransferenciaTest {
 	
 	@Test(expected = TransferenciaInvalidaException.class)
 	public void naoDeveRealizarTransferenciaComMesmaContaDeOrigemEDestino() {
-		contaOrigem.setSaldoAtual(500d);
-		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
 				.paraAConta(contaOrigem)
@@ -165,9 +188,6 @@ public class TransferenciaTest {
 	
 	@Test(expected = DataInvalidaException.class)
 	public void naoDeveRealizarTransferenciaComDataNoFuturo() {
-		contaOrigem.setSaldoAtual(5600d);
-		contaDestino.setSaldoAtual(3500d);
-
 		Calendar dataFutura = Calendar.getInstance();
 		dataFutura.add(Calendar.DAY_OF_MONTH, 2);
 		
