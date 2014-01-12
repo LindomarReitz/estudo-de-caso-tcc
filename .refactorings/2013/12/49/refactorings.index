@@ -1,0 +1,12 @@
+1386463111146	Rename package 'com.unisul.tcc'
+1386464515016	Rename type 'SaqueInvalido'
+1386465023670	Move compilation units
+1386465548037	Rename type 'Pessoa'
+1386467491377	Rename field 'saldo'
+1386514927948	Rename type 'LancamentoTest'
+1386516742935	Move compilation unit
+1386523115977	Extract local variable 'banco'
+1386523173015	Convert local variable 'conta' to field
+1386541530827	Rename local variable 'saqueContaOrigem'
+1386541606461	Delete element
+1386542737999	Infer generic type arguments

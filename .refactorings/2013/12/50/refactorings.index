@@ -1,0 +1,35 @@
+1386714711425	Move files
+1386714722626	Move file
+1386714730338	Move file
+1386714732876	Move file
+1386802297425	Extract local variable 'lancamentoDAO2'
+1386802918500	Delete element
+1386979371197	Rename type 'CriadorDeConta'
+1386979389793	Rename type 'CriadorDeLancamentos'
+1386979409224	Delete element
+1386980760305	Rename method 'comValorDe'
+1386981350406	Rename local variable 'resultadoEsperado'
+1386982121008	Rename field 'dataTransferencia'
+1386983531605	Rename method 'comDataDe'
+1387041022051	Copy folder
+1387059286301	Move file
+1387065057468	Rename local variable 'transferencia'
+1387067080819	Infer generic type arguments
+1387070009020	Delete element
+1387070478918	Rename local variable 'lancamentoEncontrado'
+1387070630784	Rename local variable 'lancamento'
+1387070685498	Rename local variable 'lancamento'
+1387070836795	Rename type 'BancaDAO'
+1387070987285	Rename local variable 'lancamentoEncontrado'
+1387071060599	Rename local variable 'lancamento'
+1387071168692	Rename local variable 'lancamento'
+1387071724586	Rename local variable 'resultadoEsperado'
+1387073121563	Delete element
+1387073277762	Rename package 'com.unisut.tcc.daos'
+1387073457424	Rename package 'com.unisul.tcc.dao'
+1387073894325	Delete element
+1387142096972	Move file
+1387142506781	Rename resource 'lancamentos.html'
+1387142529104	Delete element
+1387142873927	Delete elements
+1387142885008	Delete element
