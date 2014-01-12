@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<bancos id="1" nome="Santander"/>
+	<bancos id="2" nome="Bradesco"/>
+	<bancos id="3" nome="Banco do Brasil"/>
+	<bancos id="4" nome="Caixa Econômica"/>
+	<bancos id="5" nome="HSBC"/>
+	<usuarios id="1" nome="João da Silva" data_nascimento="1992-05-12" login="admin" senha="teste"/>
+	<contas id="1" nome="Conta corrente PF" numero_agencia="123" numero_conta="456" saldo_atual="0" id_usuario="1" id_banco="1"/>
+</dataset>

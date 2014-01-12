@@ -1,0 +1,62 @@
+1387153547294	Delete element
+1387156995499	Move package
+1387322107895	Copy file
+1387546987417	Rename method 'atualizarSaldoAtual'
+1387549048472	Rename method 'calcularSaldoAtual'
+1387576921321	Delete element
+1387577695201	Delete element
+1387586057096	Rename method 'atualizarSaldoAtual'
+1387588470802	Rename method 'buscarLancamentosPelaIdDaConta'
+1387590403932	Rename local variable 'dataLancamento'
+1387590408916	Rename local variable 'calendar'
+1387590634274	Rename local variable 'calendar'
+1387635442646	Rename method 'realizarLancamento'
+1387645776469	Copy compilation unit
+1387647784395	Rename local variable 'l'
+1387647790431	Rename local variable 'lancamento'
+1387652175181	Rename local variable 'lancamento'
+1387652189270	Rename local variable 'lancamento'
+1387652199368	Rename local variable 'lancamento'
+1387652206482	Rename local variable 'lancamento'
+1387652212059	Rename local variable 'lancamento'
+1387652221150	Rename local variable 'lancamento'
+1387652227241	Rename local variable 'lancamento'
+1387652234327	Rename local variable 'lancamento'
+1387652243446	Rename local variable 'lancamento'
+1387662278590	Delete element
+1387679977027	Rename local variable 'tabelaDeLancamentos'
+1387681785206	Rename type 'LancamentoPage'
+1387682233424	Rename resource 'ContaPage.java'
+1387719655968	Delete element
+1387719670882	Delete element
+1387721725709	Rename local variable 'select'
+1387721731515	Rename local variable 'select'
+1387722200186	Rename method 'existemNaListagem'
+1387728083341	Rename method 'deveCadastrarUmLancamento'
+1387728154121	Rename method 'x'
+1387728778109	Rename field 'util'
+1387729014434	Extract local variable 'cadastrar'
+1387729244958	Extract local variable 'cadastrar'
+1387729350838	Rename local variable 'cadastrar'
+1387729738264	Rename local variable 'cadastrar'
+1387732279502	Rename local variable 'botaoCadastrar'
+1387732313226	Rename local variable 'botaoSalvar'
+1387733375438	Rename local variable 'editar'
+1387739808404	Delete element
+1387740034433	Move file
+1387740896845	Rename field 'dataSet'
+1387746578932	Copy file
+1387746649938	Delete element
+1387746817390	Delete element
+1387750570923	Move 1 resources to 'META-INF'
+1387750840533	Delete element
+1387750875974	Copy file
+1387750884561	Delete element
+1387751037113	Copy file
+1387751288139	Delete element
+1387751516830	Move 1 resources to 'META-INF'
+1387752648223	Move 1 resources to 'META-INF'
+1387752993061	Delete element
+1387753036738	Move 1 resources to 'META-INF'
+1387753043947	Delete element
+1387753292180	Delete element
