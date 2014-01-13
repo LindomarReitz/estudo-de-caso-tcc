@@ -167,7 +167,7 @@ public class TransferenciaTest {
 				.daConta(contaOrigem)
 				.paraAConta(contaDestino)
 				.comValorDe(500d)
-				.naDataDeHoje()
+				.naDataDe(dataFutura)
 				.construir();
 		
 		transferencia.transferir();
