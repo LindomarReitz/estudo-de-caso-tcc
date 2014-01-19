@@ -86,7 +86,7 @@
 	</div>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
-			<input id="botaoEditar" type="button" class="btn btn-success" onclick="editar()" value="Atualizar" />
+			<input id="botaoAtualizar" type="button" class="btn btn-success" onclick="editar()" value="Atualizar" />
 		</div>
 	</div>
 </form>

@@ -15,30 +15,44 @@ public class EdicaoLancamentoPage {
 	public EdicaoLancamentoPage(WebDriver driver) {
 		this.driver = driver;
 	}
-
-	public void preencher(String descricao, String dataLancamento,
-			String valor, String observacao, String tipoLancamento) {
+	
+	public void comDescricao(String descricao) {
 		WebElement campoDescricao = driver.findElement(By.id("campoDescricao"));
 		campoDescricao.clear();
 		campoDescricao.sendKeys(descricao);
-		
+	}
+
+	public void comDataDeLancamento(String dataLancamento) {
 		WebElement campoData = driver.findElement(By.id("dataLancamento"));
 		campoData.clear();
 		campoData.sendKeys(dataLancamento);
-		
+	}
+	
+	public void comValor(String valor) {
 		WebElement campoValor = driver.findElement(By.id("campoValor"));
 		campoValor.clear();
 		campoValor.sendKeys(valor);
-		
+	}
+	
+	public void comObservacao(String observacao) {
 		WebElement campoObservacao = driver.findElement(By.id("campoObservacao"));
 		campoObservacao.clear();
 		campoObservacao.sendKeys(observacao);
-		
+	}
+	
+	public void selecionarTipoLancamento(String tipoLancamento) {
 		Select comboTipoLancamento = new Select(driver.findElement(By.id("comboTipoLancamento")));
 		comboTipoLancamento.selectByVisibleText(tipoLancamento);
-		
-		WebElement botaoEditar = driver.findElement(By.id("botaoEditar"));
-		botaoEditar.click();
+	}
+	
+	public void selecionarConta(String nomeConta) {
+		Select comboConta = new Select(driver.findElement(By.id("comboConta")));
+		comboConta.selectByVisibleText(nomeConta);
+	}
+
+	public void clicarEmAtualizar() {
+		WebElement botaoAtualizar = driver.findElement(By.id("botaoAtualizar"));
+		botaoAtualizar.click();
 		
 		new WebDriverWait(driver, 10).until(
 				ExpectedConditions.alertIsPresent());
