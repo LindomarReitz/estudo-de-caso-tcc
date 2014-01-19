@@ -15,28 +15,39 @@ public class CadastroLancamentoPage {
 	public CadastroLancamentoPage(WebDriver driver) {
 		this.driver = driver;
 	}
-	
-	public void preencher(String descricao, String dataLancamento,
-			String valor, String observacao, String tipoLancamento, String nomeConta) {
+
+	public void comDescricao(String descricao) {
 		WebElement campoDescricao = driver.findElement(By.id("campoDescricao"));
 		campoDescricao.sendKeys(descricao);
-		
+	}
+
+	public void comDataDeLancamento(String dataLancamento) {
 		WebElement campoData = driver.findElement(By.id("dataLancamento"));
 		campoData.sendKeys(dataLancamento);
-		
+	}
+
+	public void comValor(String valor) {
 		WebElement campoValor = driver.findElement(By.id("campoValor"));
 		campoValor.sendKeys(valor);
-		
+	}
+
+	public void comObservacao(String observacao) {
 		WebElement campoObservacao = driver.findElement(By.id("campoObservacao"));
 		campoObservacao.sendKeys(observacao);
-		
-		Select comboTipoLancamento = new Select(driver.findElement(By.id("comboTipoLancamento")));
-		comboTipoLancamento.selectByVisibleText(tipoLancamento);
-
+	}
+	
+	public void selecionarConta(String nomeConta) {
 		Select comboConta = new Select(driver.findElement(By.id("comboConta")));
 		comboConta.selectByVisibleText(nomeConta);
-		
-		WebElement botaoSalvar = driver.findElement(By.id("botaoCadastrar"));
+	}
+
+	public void selecionarTipoLancamento(String tipoLancamento) {
+		Select comboTipoLancamento = new Select(driver.findElement(By.id("comboTipoLancamento")));
+		comboTipoLancamento.selectByVisibleText(tipoLancamento);
+	}
+
+	public void clicarEmSalvar() {
+		WebElement botaoSalvar = driver.findElement(By.id("botaoSalvar"));
 		botaoSalvar.click();
 		
 		new WebDriverWait(driver, 10).until(
@@ -45,9 +56,8 @@ public class CadastroLancamentoPage {
 		alerta = driver.switchTo().alert();
 		alerta.accept();
 	}
-	
+
 	public String getMensagemAlerta() {
 		return alerta.getText();
 	}
 }
-

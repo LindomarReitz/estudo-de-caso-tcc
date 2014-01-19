@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,18 +18,21 @@ import com.unisul.tcc.pageobjects.EdicaoLancamentoPage;
 import com.unisul.tcc.pageobjects.LancamentosPage;
 
 public class LancamentosTest {
-	private WebDriver driver;
+	private static WebDriver driver;
+	private static String URL_BASE = "http://localhost:8083/EstudoDeCaso";
 	private LancamentosPage lancamentos;
 	private ContasPage contas;
-	private String urlBase = "http://localhost:8083/EstudoDeCaso";
 	
-	@Before
-	public void setUp()  throws Exception {
+	@BeforeClass
+	public static void setUpClass() {
 		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
 		
 		driver = new ChromeDriver();
-		driver.get(urlBase);
-		
+		driver.get(URL_BASE);
+	}
+	
+	@Before
+	public void setUp()  throws Exception {
 		lancamentos = new LancamentosPage(driver);
 		contas = new ContasPage(driver);
 		
@@ -35,9 +40,12 @@ public class LancamentosTest {
 	}
 	
 	@After
-	public void tearDown() throws Exception {
-		driver.get(urlBase + "/excluirTodosLancamentos");
-		
+	public void tearDown() {
+		driver.get(URL_BASE + "/excluirTodosLancamentos");
+	}
+
+	@AfterClass
+	public static void tearDownClass() {
 		driver.quit();
 	}
 	
@@ -51,8 +59,14 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
-	
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
+		
 		assertEquals("Lançamento salvo com sucesso!", paginaCadastro.getMensagemAlerta());
 		assertTrue(lancamentos.existeNaListagem(descricao, dataLancamento, valor, observacao, nomeConta));
 		
@@ -72,7 +86,13 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 	
 		assertEquals("Lançamento salvo com sucesso!", paginaCadastro.getMensagemAlerta());
 		assertTrue(lancamentos.existeNaListagem(descricao, dataLancamento, valor, observacao, nomeConta));
@@ -84,30 +104,22 @@ public class LancamentosTest {
 	@Test
 	public void naoDeveCadastrarUmLancamentoComCamposEmBranco() {
 		String descricao = "";
-		String dataLancamento = "13/12/2013";
-		String valor = "3.000,00";
-		String observacao = "Salário para testes";
-		String tipoLancamento = "Depósito";
-		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.clicarEmSalvar();
 
 		assertTrue(paginaCadastro.getMensagemAlerta().contains("O campo descrição não pode estar em branco!"));
 	}
 	
 	@Test
 	public void naoDeveCadastrarLancamentoComDataNoFuturo() {
-		String descricao = "Lançamento no futuro";	
 		String dataLancamento = "13/12/3000";
-		String valor = "3.000,00";
-		String observacao = "Lançamento no futuro";
-		String tipoLancamento = "Depósito";
-		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
-
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.clicarEmSalvar();
+		
 		assertTrue(paginaCadastro.getMensagemAlerta().contains("Data não pode ser no futuro!"));
 	}
 	
@@ -123,22 +135,24 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 		
 		assertTrue(paginaCadastro.getMensagemAlerta().contains("Não se pode efetuar um saque com o valor maior que o saldo!"));
 	}
 	
 	@Test
 	public void naoDeveCadastrarUmLancamentoComValorZero() {
-		String descricao = "Lançamento com valor zero";	
-		String dataLancamento = "13/12/2013";
 		String valor = "0,00";
-		String observacao = "Lançamento com valor zero";
-		String tipoLancamento = "Depósito";
-		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.clicarEmSalvar();
 		
 		assertTrue(paginaCadastro.getMensagemAlerta().contains("O campo valor não pode ser zero!"));
 	}
@@ -155,7 +169,13 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 
 		contas.visitar();
 		assertEquals("2.900,00", contas.getValor());
@@ -165,7 +185,9 @@ public class LancamentosTest {
 		String novoValor = "110,00";
 		
 		EdicaoLancamentoPage paginaEdicao = lancamentos.editar();
-		paginaEdicao.preencher(descricao, dataLancamento, novoValor, observacao, tipoLancamento);
+		paginaEdicao.comValor(novoValor);
+		paginaEdicao.clicarEmAtualizar();
+
 		assertEquals("Lançamento editado com sucesso!", paginaEdicao.getMensagemAlerta());
 		assertTrue(lancamentos.existeNaListagem(descricao, dataLancamento, novoValor, observacao, nomeConta));
 
@@ -178,13 +200,10 @@ public class LancamentosTest {
 		criarDepositoInicial();
 		
 		String descricao = "";
-		String dataLancamento = "13/12/2013";
-		String valor = "3.000,00";
-		String observacao = "Salário para testes";
-		String tipoLancamento = "Depósito";
 		
 		EdicaoLancamentoPage paginaEdicao = lancamentos.editar();
-		paginaEdicao.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento);
+		paginaEdicao.comDescricao(descricao);
+		paginaEdicao.clicarEmAtualizar();
 
 		assertTrue(paginaEdicao.getMensagemAlerta().contains("O campo descrição não pode estar em branco!"));
 	}
@@ -193,15 +212,12 @@ public class LancamentosTest {
 	public void naoDeveEditarUmLancamentoComDataNoFuturo() {
 		criarDepositoInicial();
 		
-		String descricao = "Depósito no futuro";
 		String dataLancamento = "13/12/3000";
-		String valor = "3.000,00";
-		String observacao = "Salário para testes";
-		String tipoLancamento = "Depósito";
 		
 		EdicaoLancamentoPage paginaEdicao = lancamentos.editar();
-		paginaEdicao.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento);
-
+		paginaEdicao.comDataDeLancamento(dataLancamento);
+		paginaEdicao.clicarEmAtualizar();
+		
 		assertTrue(paginaEdicao.getMensagemAlerta().contains("Data não pode ser no futuro!"));
 	}
 	
@@ -217,7 +233,13 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 
 		contas.visitar();
 		assertEquals("2.700,00", contas.getValor());
@@ -227,7 +249,9 @@ public class LancamentosTest {
 		String novoValor = "3001,00";
 		
 		EdicaoLancamentoPage paginaEdicao = lancamentos.editar();
-		paginaEdicao.preencher(descricao, dataLancamento, novoValor, observacao, tipoLancamento);
+		paginaEdicao.comValor(novoValor);
+		paginaEdicao.clicarEmAtualizar();
+		
 		assertTrue(paginaEdicao.getMensagemAlerta().contains("Não se pode efetuar um saque com o valor maior que o saldo!"));
 	}
 	
@@ -243,7 +267,13 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 
 		contas.visitar();
 		assertEquals("2.935,00", contas.getValor());
@@ -253,7 +283,9 @@ public class LancamentosTest {
 		String novoValor = "0,00";
 		
 		EdicaoLancamentoPage paginaEdicao = lancamentos.editar();
-		paginaEdicao.preencher(descricao, dataLancamento, novoValor, observacao, tipoLancamento);
+		paginaEdicao.comValor(novoValor);
+		paginaEdicao.clicarEmAtualizar();
+		
 		assertTrue(paginaEdicao.getMensagemAlerta().contains(("O campo valor não pode ser zero!")));
 	}
 	
@@ -269,7 +301,13 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 
 		contas.visitar();
 		assertEquals("2.970,00", contas.getValor());
@@ -293,6 +331,12 @@ public class LancamentosTest {
 		String nomeConta = "Conta corrente PF";
 		
 		CadastroLancamentoPage paginaCadastro = lancamentos.cadastrar();
-		paginaCadastro.preencher(descricao, dataLancamento, valor, observacao, tipoLancamento, nomeConta);
+		paginaCadastro.comDescricao(descricao);
+		paginaCadastro.comDataDeLancamento(dataLancamento);
+		paginaCadastro.comValor(valor);
+		paginaCadastro.comObservacao(observacao);
+		paginaCadastro.selecionarTipoLancamento(tipoLancamento);
+		paginaCadastro.selecionarConta(nomeConta);
+		paginaCadastro.clicarEmSalvar();
 	}
 }
