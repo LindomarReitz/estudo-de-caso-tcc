@@ -2,8 +2,6 @@ package com.unisul.tcc.beans;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.Calendar;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -160,14 +158,11 @@ public class TransferenciaTest {
 	
 	@Test(expected = DataInvalidaException.class)
 	public void naoDeveRealizarTransferenciaComDataNoFuturo() {
-		Calendar dataFutura = Calendar.getInstance();
-		dataFutura.add(Calendar.DAY_OF_MONTH, 2);
-		
 		Transferencia transferencia = new CriadorDeTransferencia()
 				.daConta(contaOrigem)
 				.paraAConta(contaDestino)
 				.comValorDe(500d)
-				.naDataDe(dataFutura)
+				.naDataFutura()
 				.construir();
 		
 		transferencia.transferir();

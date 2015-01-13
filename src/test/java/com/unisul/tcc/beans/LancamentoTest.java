@@ -4,8 +4,6 @@ import static com.unisul.tcc.beans.TipoLancamento.DEPOSITO;
 import static com.unisul.tcc.beans.TipoLancamento.SAQUE;
 import static junit.framework.Assert.assertEquals;
 
-import java.util.Calendar;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -155,14 +153,11 @@ public class LancamentoTest {
 
 	@Test(expected = DataInvalidaException.class)
 	public void naoDeveRealizarUmLancamentoComDataNoFuturo() {
-		Calendar dataFutura = Calendar.getInstance();
-		dataFutura.add(Calendar.DAY_OF_MONTH, 3);
-
 		Lancamento saque = new CriadorDeLancamento()
 				.paraAConta(conta)
 				.comADescricao("Saque do futuro")
 				.noValorDe(0d)
-				.naDataDe(dataFutura)
+				.naDataFutura()
 				.doTipo(SAQUE)
 				.construir();
 

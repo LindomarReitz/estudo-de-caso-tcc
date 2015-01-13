@@ -30,8 +30,12 @@ public class CriadorDeLancamento {
 		return this;
 	}
 	
-	public CriadorDeLancamento naDataDe(Calendar data) {
-		this.data = data;
+	public CriadorDeLancamento naDataFutura() {
+		Calendar dataFutura = Calendar.getInstance();
+		dataFutura.add(Calendar.DAY_OF_MONTH, 1);
+
+		this.data = dataFutura;
+		
 		return this;
 	}
 	
