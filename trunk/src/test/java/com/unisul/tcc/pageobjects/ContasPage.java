@@ -10,6 +10,7 @@ public class ContasPage {
 	private WebDriver driver;
 	private List<WebElement> linhas;
 	private List<WebElement> colunas;
+	
 	public ContasPage(WebDriver driver) {
 		this.driver = driver;
 	}

@@ -1,38 +1,49 @@
 package com.unisul.tcc.pageobjects;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.unisul.tcc.utils.AlertUtils;
 
 public class CadastroLancamentoPage {
 	private WebDriver driver;
-	private Alert alerta;
+	private AlertUtils alertUtils;
+	
+	@FindBy(id = "campoDescricao")
+	private WebElement campoDescricao;
+	
+	@FindBy(id = "dataLancamento")
+	private WebElement campoData;
+	
+	@FindBy(id = "campoValor")
+	private WebElement campoValor;
+	
+	@FindBy(id = "campoObservacao")
+	private WebElement campoObservacao;
+
+	@FindBy(id = "botaoSalvar")
+	private WebElement botaoSalvar;
 	
 	public CadastroLancamentoPage(WebDriver driver) {
 		this.driver = driver;
 	}
 
 	public void comDescricao(String descricao) {
-		WebElement campoDescricao = driver.findElement(By.id("campoDescricao"));
 		campoDescricao.sendKeys(descricao);
 	}
 
 	public void comDataDeLancamento(String dataLancamento) {
-		WebElement campoData = driver.findElement(By.id("dataLancamento"));
 		campoData.sendKeys(dataLancamento);
 	}
 
 	public void comValor(String valor) {
-		WebElement campoValor = driver.findElement(By.id("campoValor"));
 		campoValor.sendKeys(valor);
 	}
 
 	public void comObservacao(String observacao) {
-		WebElement campoObservacao = driver.findElement(By.id("campoObservacao"));
 		campoObservacao.sendKeys(observacao);
 	}
 	
@@ -47,17 +58,13 @@ public class CadastroLancamentoPage {
 	}
 
 	public void clicarEmSalvar() {
-		WebElement botaoSalvar = driver.findElement(By.id("botaoSalvar"));
 		botaoSalvar.click();
 		
-		new WebDriverWait(driver, 10).until(
-				ExpectedConditions.alertIsPresent());
-		
-		alerta = driver.switchTo().alert();
-		alerta.accept();
+		alertUtils = new AlertUtils(driver);
+		alertUtils.clicarEmOk();
 	}
 
 	public String getMensagemAlerta() {
-		return alerta.getText();
+		return alertUtils.getMensagem();
 	}
 }

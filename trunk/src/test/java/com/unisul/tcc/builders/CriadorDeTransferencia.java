@@ -31,13 +31,16 @@ public class CriadorDeTransferencia {
 		return this;
 	}
 	
-	public CriadorDeTransferencia naDataDe(Calendar data) {
-		this.data = data;
+	public CriadorDeTransferencia naDataDeHoje() {
+		this.data = Calendar.getInstance();
 		return this;
 	}
 	
-	public CriadorDeTransferencia naDataDeHoje() {
-		this.data = Calendar.getInstance();
+	public CriadorDeTransferencia naDataFutura() {
+		Calendar dataFutura = Calendar.getInstance();
+		dataFutura.add(Calendar.DATE, 1);
+		
+		this.data = dataFutura;
 		return this;
 	}
 	

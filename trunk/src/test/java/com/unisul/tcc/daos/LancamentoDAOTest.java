@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.sql.Connection;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;

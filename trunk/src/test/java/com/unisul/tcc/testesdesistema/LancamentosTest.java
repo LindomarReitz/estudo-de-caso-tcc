@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.PageFactory;
 
 import com.unisul.tcc.pageobjects.CadastroLancamentoPage;
 import com.unisul.tcc.pageobjects.ContasPage;
@@ -33,7 +34,7 @@ public class LancamentosTest {
 	
 	@Before
 	public void setUp()  throws Exception {
-		lancamentos = new LancamentosPage(driver);
+		lancamentos = PageFactory.initElements(driver, LancamentosPage.class);
 		contas = new ContasPage(driver);
 		
 		lancamentos.visitar();
