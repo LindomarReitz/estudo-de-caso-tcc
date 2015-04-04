@@ -1,0 +1,1 @@
+Projeto criado como estudo de caso para o TCC sobre testes automatizados, nos níveis de unidade, integração e sistema.
